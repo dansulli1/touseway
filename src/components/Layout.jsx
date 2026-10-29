@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import JoshGuide from "./JoshGuide";
 
 const titles = {
   "/": "JOSHWAY - Youth Life Skills Programs in Easton, PA",
@@ -44,6 +45,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <JoshGuide />
     </>
   );
 }

@@ -23,7 +23,12 @@ export default function Header() {
         <nav className={`nav ${open ? "open" : ""}`} aria-label="Menu">
           {nav.map((group) => (
             <div className="nav-item" key={group.label}>
-              <button className="menu-btn" type="button" aria-haspopup="true">
+              <button
+                className="menu-btn"
+                type="button"
+                aria-haspopup="true"
+                data-tour={group.label === "About" ? "about" : undefined}
+              >
                 {group.label} <i className="caret" />
               </button>
               <div className="dropdown">
