@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { answerQuestion } from "../joshAnswers";
 import "../josh.css";
 
 const STORAGE_KEY = "josh-guide";
@@ -251,10 +252,12 @@ export default function JoshGuide() {
     const text = draft.trim();
     if (!text) return;
     setDraft("");
-    pushExchange(
-      text,
-      "I can point you to the right page. Try a quick action, or ask me to show you around."
-    );
+    const answer = answerQuestion(text);
+    if (answer.tour) {
+      restartTour();
+      return;
+    }
+    pushExchange(text, answer.reply, answer.to);
   }
 
   return (
