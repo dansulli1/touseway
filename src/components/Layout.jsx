@@ -23,11 +23,15 @@ const titles = {
   "/terms": "Terms & Conditions - JOSHWAY",
 };
 
-export default function Layout() {
+export default function Layout({ stage = "shown", pageKey, onFadeEnd }) {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
     document.title = titles[pathname] || "JOSHWAY";
+  }, [pathname]);
+
+  useEffect(() => {
+    if (pageKey !== pathname) return;
     if (hash) {
       const el = document.querySelector(hash);
       if (el) {
@@ -36,12 +40,12 @@ export default function Layout() {
       }
     }
     window.scrollTo(0, 0);
-  }, [pathname, hash]);
+  }, [pageKey, pathname, hash]);
 
   return (
     <>
       <Header />
-      <main id="content">
+      <main id="content" className={`page-fade ${stage}`} onAnimationEnd={onFadeEnd}>
         <Outlet />
       </main>
       <Footer />

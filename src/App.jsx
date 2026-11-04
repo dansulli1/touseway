@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Layout from "./components/Layout";
 import About from "./pages/About";
 import Arcade from "./pages/Arcade";
@@ -14,9 +15,45 @@ import Programs from "./pages/Programs";
 import { Contact, Newsletter, Privacy, Terms, Volunteer } from "./pages/Simple";
 
 export default function App() {
+  const location = useLocation();
+  const locationRef = useRef(location);
+  const [shown, setShown] = useState(location);
+  const [stage, setStage] = useState("shown");
+  locationRef.current = location;
+
+  useEffect(() => {
+    if (location.pathname === shown.pathname) {
+      if (location.hash !== shown.hash || location.search !== shown.search) setShown(location);
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(location);
+      setStage("shown");
+      return;
+    }
+    setStage("out");
+  }, [location, shown]);
+
+  useEffect(() => {
+    if (stage !== "out") return;
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+      setShown(locationRef.current);
+      setStage("in");
+    }, 450);
+    return () => clearTimeout(timer);
+  }, [stage]);
+
+  function onFadeEnd(event) {
+    if (event.target !== event.currentTarget || stage !== "out") return;
+    window.scrollTo(0, 0);
+    setShown(locationRef.current);
+    setStage("in");
+  }
+
   return (
-    <Routes>
-      <Route element={<Layout />}>
+    <Routes location={shown}>
+      <Route element={<Layout stage={stage} pageKey={shown.pathname} onFadeEnd={onFadeEnd} />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="programs" element={<Programs />} />

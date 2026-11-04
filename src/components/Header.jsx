@@ -17,7 +17,7 @@ export default function Header() {
     <header className={`header ${scrolled ? "scrolled" : ""}`}>
       <a className="skip" href="#content">Skip to content</a>
       <div className="wrap header-inner">
-        <Link to="/" className="logo" onClick={() => setOpen(false)} aria-label="JOSHWAY home">
+        <Link to="/" className="logo" data-tour="home" onClick={() => setOpen(false)} aria-label="JOSHWAY home">
           <img src="/media/logo.png" alt="JOSHWAY" />
         </Link>
         <nav className={`nav ${open ? "open" : ""}`} aria-label="Menu">
@@ -27,7 +27,7 @@ export default function Header() {
                 className="menu-btn"
                 type="button"
                 aria-haspopup="true"
-                data-tour={group.label === "About" ? "about" : undefined}
+                data-tour={group.label.toLowerCase()}
               >
                 {group.label} <i className="caret" />
               </button>
@@ -43,9 +43,9 @@ export default function Header() {
           ))}
           <NavLink className="nav-link" to="/arcade" onClick={() => setOpen(false)}>Arcade</NavLink>
           <a className="nav-link" href="https://shop.joshway.org/" target="_blank" rel="noreferrer">Shop</a>
-          <Link className="btn donate" to="/donate" onClick={() => setOpen(false)}>Donate</Link>
+          <Link className="btn donate" data-tour="donate" to="/donate" onClick={() => setOpen(false)}>Donate</Link>
         </nav>
-        <button className="burger" aria-label="Open menu" onClick={() => setOpen((v) => !v)}>
+        <button className="burger" data-tour="menu" aria-label="Open menu" onClick={() => setOpen((v) => !v)}>
           <span /><span /><span />
         </button>
       </div>

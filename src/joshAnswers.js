@@ -320,13 +320,13 @@ const topics = [
     phrases: ["program", "programs", "life skills", "ages", "middle school", "high school", "8 to 18"],
     to: "/programs",
     reply:
-      "Programs are for ages 8 to 18, with a focus on middle and high school. They include the Creative Lab, The Digital Diet, the Podcast Network, and the Youth Leadership Bridge with Money Smarts, Health & Well Being, Speak Up & Shine, and Future Ready. That path can lead to JOSHWAY Forward, A Market for Kids, or the scholarship at Northampton Community College.",
+      "We run the Youth Leadership Bridge for middle school life skills and leadership, the Creative Lab for hands-on making at 913 Northampton Street, and Digital Wellness through The Digital Diet for healthier technology habits. Programs serve ages 8 to 18, with a focus on middle and high school.",
   },
   {
     phrases: ["visionary", "visionaries", "impact", "student stories"],
     to: "/impact",
     reply:
-      "Impact introduces Isaias, Ayeika, Cam, Jamison, Daniel, and Peter. From that page you can request the Bridge, request a Lab Experience, request The Digital Diet, share your talents, or give. Ask me about a person or one of those.",
+      "Impact measures success through young people finding their voice—stories from Isaias, Ayeika, Cam, Jamison, Daniel, and Peter, including the Before the Snap podcast. From that page you can also request the Bridge, a Lab Experience, The Digital Diet, share your talents, or give.",
   },
   {
     phrases: ["advisory board", "advisors", "advisor"],
@@ -367,10 +367,16 @@ const topics = [
       "The Lab is at 913 Northampton Street, Easton, PA 18042, in the West Ward. Email info@joshway.org, or send a note on the contact page about programs, a school visit, a gift, or a partnership.",
   },
   {
+    phrases: ["what is joshway", "whats joshway", "what s joshway", "who is joshway"],
+    to: "/",
+    reply:
+      "JOSHWAY is a nonprofit in Easton, PA that connects youth to real world opportunities, with a focus on life skills, self-confidence, and digital literacy. We show up in schools, after-school programs, and youth organizations so every young person has a pathway forward.",
+  },
+  {
     phrases: ["about", "mission", "vision", "founded", "josh robertson", "who is josh", "who are you", "your story", "the story"],
     to: "/about",
     reply:
-      "JOSHWAY was founded in 2023 in memory of Josh Robertson, so no young person has to feel invisible. The mission is to connect young people to real world opportunities, with a focus on life skills, self-confidence, and digital literacy. JOSHWAY is the name: Joy, Opportunity, Service, Hope, Wisdom, Artistry, and Youth.",
+      "JOSHWAY is a nonprofit in Easton, founded in 2023 in memory of Josh Robertson so no young person has to feel invisible. We connect young people to real world opportunities, with a focus on life skills, self-confidence, and digital literacy.",
   },
 ];
 

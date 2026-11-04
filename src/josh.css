@@ -9,7 +9,11 @@
     0 0 0 5px var(--purple),
     0 0 18px rgba(118, 135, 243, 0.45);
   pointer-events: none;
-  transition: top 0.35s ease, left 0.35s ease, width 0.35s ease, height 0.35s ease;
+  transition:
+    top 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    left 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    height 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .josh-actor {
@@ -18,33 +22,110 @@
   pointer-events: none;
 }
 
-.josh-actor img {
-  width: 250px;
-  height: auto;
-  filter: drop-shadow(0 16px 18px rgba(20, 24, 40, 0.22));
+.josh-actor.glide {
+  transition:
+    top 0.95s cubic-bezier(0.22, 0.61, 0.36, 1),
+    left 0.95s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.josh-actor.flying img { width: 340px; }
-.josh-actor.compact img { width: 200px; }
+.josh-figure {
+  position: relative;
+  width: 250px;
+  height: 310px;
+  filter: drop-shadow(0 14px 16px rgba(20, 24, 40, 0.16));
+  transform-origin: center center;
+}
 
-.josh-actor.in { animation: josh-enter 1.05s cubic-bezier(0.18, 0.8, 0.22, 1) both; }
-.josh-actor.out { animation: josh-leave 0.7s ease-in forwards; }
+/* Bubble on his left: mirror so he faces the text. Look lerp stays on the parent. */
+.josh-figure.face-left {
+  transform: scaleX(-1);
+}
 
-.josh-actor.here .josh-bob { animation: josh-bob 2.8s ease-in-out infinite; }
+.josh-actor.compact .josh-figure {
+  width: 200px;
+  height: 248px;
+}
+
+.josh-actor.here .josh-figure {
+  transition:
+    width 0.95s cubic-bezier(0.22, 0.61, 0.36, 1),
+    height 0.95s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.josh-figure img {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+.josh-figure .stand {
+  width: 100%;
+  opacity: 1;
+}
+
+.josh-figure .fly {
+  width: 138%;
+  bottom: 6%;
+}
+
+.josh-actor.in { animation: josh-enter 1.5s cubic-bezier(0.16, 0.84, 0.3, 1) both; }
+.josh-actor.out { animation: josh-leave 1.05s cubic-bezier(0.45, 0.05, 0.2, 1) forwards; }
+
+.josh-actor.in .pose.fly {
+  opacity: 1;
+  animation: pose-fade-out 1.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.josh-actor.in .pose.stand {
+  opacity: 0;
+  animation: pose-fade-in 1.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.josh-actor.out .pose.fly { animation: pose-fade-in-early 1.05s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.josh-actor.out .pose.stand { animation: pose-fade-out-early 1.05s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+.josh-bob,
+.josh-look {
+  transform-origin: 72% 18%;
+}
+
+.josh-actor.here .josh-bob { animation: josh-bob 4.4s ease-in-out infinite; }
 
 @keyframes josh-enter {
-  0% { transform: translate3d(-75vw, 24px, 0) rotate(-7deg); }
-  72% { transform: translate3d(16px, -10px, 0) rotate(2deg); }
-  100% { transform: translate3d(0, 0, 0) rotate(0); }
+  from { transform: translate3d(-58vw, 22px, 0) rotate(-4deg); }
+  to { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
 @keyframes josh-leave {
-  to { transform: translate3d(80vw, -30px, 0) rotate(8deg); opacity: 0.15; }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(62vw, -18px, 0) rotate(5deg); opacity: 0; }
+}
+
+@keyframes pose-fade-out {
+  0%, 38% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes pose-fade-in {
+  0%, 38% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes pose-fade-out-early {
+  0% { opacity: 1; }
+  42%, 100% { opacity: 0; }
+}
+
+@keyframes pose-fade-in-early {
+  0% { opacity: 0; }
+  42%, 100% { opacity: 1; }
 }
 
 @keyframes josh-bob {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -7px; }
+  0%, 100% { translate: 0 0; rotate: -0.7deg; }
+  50% { translate: 0 -5px; rotate: 0.7deg; }
 }
 
 .josh-bubble,
@@ -57,17 +138,32 @@
 
 .josh-bubble {
   position: absolute;
-  top: 28px;
-  left: calc(100% + 6px);
+  top: 4px;
+  left: calc(100% + 14px);
   width: min(300px, calc(100vw - 48px));
   background: #fff;
   color: var(--ink);
   border-radius: 22px;
-  padding: 16px 16px 12px;
+  padding: 24px;
   box-shadow: 0 16px 40px rgba(20, 24, 40, 0.16);
+  display: flex;
+  flex-direction: column;
+  animation: josh-bubble-in 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
-.josh-bubble.left { left: auto; right: calc(100% + 6px); }
+@keyframes josh-bubble-in {
+  from { opacity: 0; translate: 0 12px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+.josh-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: josh-bubble-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.josh-bubble.left { left: auto; right: calc(100% + 14px); }
 
 .josh-bubble::after {
   content: "";
@@ -83,8 +179,25 @@
 
 .josh-bubble.left::after { left: auto; right: -7px; }
 
+.josh-bubble-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+
+.josh-bubble-bar .josh-x {
+  position: static;
+  margin-left: auto;
+  flex: none;
+  top: auto;
+  right: auto;
+}
+
 .josh-kicker {
-  margin: 0 28px 4px 0;
+  display: flex;
+  align-items: center;
+  margin: 0;
   color: var(--cyan);
   font-size: 12px;
   font-weight: 800;
@@ -100,36 +213,69 @@
 }
 
 .josh-detail {
-  margin: 6px 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: 14.5px;
+  line-height: 1.45;
+}
+
+.josh-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.josh-progress {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--lavender);
+  overflow: hidden;
+}
+
+.josh-progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--purple);
+  transition: width 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .josh-actions {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 12px;
-  margin-top: 14px;
 }
 
-.josh-actions span {
-  color: var(--soft);
-  font-size: 13px;
-  font-weight: 600;
+.josh-copy + .josh-actions {
+  margin-top: 24px;
 }
 
-.josh-hint {
-  margin: 10px 0 0;
-  color: var(--soft);
-  font-size: 12px;
+.josh-quiet {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
 }
+
+.josh-quiet:hover { color: var(--purple); }
 
 .josh-x {
   position: absolute;
   top: 8px;
   right: 8px;
+  z-index: 2;
   width: 28px;
   height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 0;
   border-radius: 50%;
   background: var(--gray);
@@ -137,6 +283,7 @@
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .josh-x:hover { background: var(--lavender); }
@@ -150,17 +297,26 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
+  animation: josh-settle 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes josh-settle {
+  from { opacity: 0; translate: 10px 18px; }
+  to { opacity: 1; translate: 0 0; }
 }
 
 .josh-hey {
+  border: 0;
   background: #fff;
   color: var(--ink);
+  font: inherit;
   font-weight: 800;
   font-size: 14px;
   border-radius: 999px;
   padding: 8px 12px;
   box-shadow: var(--shadow);
   position: relative;
+  cursor: pointer;
 }
 
 .josh-hey::after {
@@ -174,9 +330,18 @@
   transform: rotate(45deg);
 }
 
+.josh-hey.note {
+  max-width: min(260px, calc(100vw - 120px));
+  border-radius: 18px;
+  padding: 10px 14px;
+  font-size: 15px;
+  line-height: 1.35;
+  text-align: left;
+}
+
 .josh-corner {
-  width: 78px;
-  height: 78px;
+  width: 108px;
+  height: 108px;
   border-radius: 50%;
   border: 3px solid #fff;
   padding: 0;
@@ -186,6 +351,13 @@
   cursor: pointer;
 }
 
+.josh-corner.open {
+  border-color: var(--purple);
+  box-shadow:
+    0 12px 28px rgba(20, 24, 40, 0.22),
+    0 0 0 3px rgba(118, 135, 243, 0.35);
+}
+
 .josh-corner-face,
 .josh-mini {
   position: relative;
@@ -193,18 +365,21 @@
   overflow: hidden;
 }
 
-.josh-corner-face { width: 100%; height: 100%; }
+.josh-corner-face {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
 
 .josh-corner-face img,
 .josh-mini img {
   position: absolute;
-  width: 340%;
+  width: 152%;
   max-width: none;
   height: auto;
-  left: 50%;
-  top: 50%;
+  left: -62%;
+  top: -4%;
   margin: 0;
-  transform: translate(-72%, -24%);
 }
 
 .josh-chat {
@@ -223,9 +398,16 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 44px 12px 12px;
+  padding: 12px;
   border-bottom: 1px solid var(--line);
-  position: relative;
+}
+
+.josh-chat-bar .josh-x {
+  position: static;
+  margin-left: auto;
+  flex: none;
+  top: auto;
+  right: auto;
 }
 
 .josh-chat-bar strong { display: block; font-size: 15px; }
@@ -348,30 +530,132 @@
 }
 
 @media (max-width: 720px) {
+  /* Bottom dock: Josh left, bubble right — never stacked over him */
   .josh-actor {
     top: auto !important;
-    left: 8px !important;
+    left: 4px !important;
+    right: auto !important;
     bottom: 8px;
+    z-index: 60;
   }
-  .josh-actor img { width: 132px; }
-  .josh-actor.flying img { width: 180px; }
+  .josh-bob {
+    position: relative;
+    z-index: 2;
+  }
+  /* Match visual mass with the condensed bubble (~200–210px tall) */
+  .josh-figure {
+    width: 162px;
+    height: 202px;
+  }
+  .josh-actor.compact .josh-figure {
+    width: 156px;
+    height: 194px;
+  }
+  /* Bubble stays on his right — keep natural facing */
+  .josh-figure.face-left {
+    transform: none;
+  }
   .josh-bubble,
   .josh-bubble.left {
-    position: fixed;
-    left: 12px;
-    right: 12px;
+    position: absolute;
     top: auto;
-    bottom: 148px;
-    width: auto;
+    bottom: 0;
+    left: calc(100% + 8px);
+    right: auto;
+    z-index: 1;
+    width: min(210px, calc(100vw - 180px));
+    max-height: min(360px, calc(100dvh - var(--header) - 28px));
+    height: auto;
+    overflow: hidden;
+    padding: 10px 12px 8px;
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(20, 24, 40, 0.14);
   }
-  .josh-bubble::after { display: none; }
+  .josh-bubble-bar {
+    margin: 0 0 2px;
+    gap: 6px;
+  }
+  .josh-bubble .josh-copy {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    gap: 4px;
+  }
+  /* Scroll copy only — keep progress + Previous/Next pinned */
+  .josh-bubble .josh-controls,
+  .josh-bubble > .josh-actions {
+    flex: 0 0 auto;
+  }
+  .josh-bubble .josh-controls {
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .josh-bubble .josh-copy + .josh-actions {
+    margin-top: 8px;
+  }
+  .josh-bubble .josh-actions {
+    gap: 4px;
+  }
+  .josh-bubble::after,
+  .josh-bubble.left::after {
+    display: block;
+    left: -6px;
+    right: auto;
+    top: auto;
+    bottom: 24px;
+  }
   .josh-chat { height: min(70vh, 520px); }
+  .josh-dock {
+    right: 16px;
+    bottom: 16px;
+  }
+  .josh-corner {
+    width: 96px;
+    height: 96px;
+  }
+
+  /* Smaller type so the bubble hugs copy + buttons */
+  .josh-kicker { font-size: 10px; }
+  .josh-say { font-size: 15px; line-height: 1.25; }
+  .josh-detail { font-size: 12.5px; line-height: 1.4; }
+  .josh-quiet {
+    font-size: 12.5px;
+    min-height: 36px;
+    padding: 4px 8px;
+  }
+  .josh-bubble .btn {
+    font-size: 13px;
+    min-height: 38px;
+    padding: 7px 12px;
+  }
+  .josh-hey { font-size: 13px; }
+  .josh-hey.note { font-size: 14px; }
+  .josh-chat-bar strong { font-size: 14px; }
+  .josh-chat-bar span { font-size: 11px; }
+  .josh-msg { font-size: 13.5px; }
+  .josh-chips p { font-size: 11px; }
+  .josh-chips button {
+    font-size: 12px;
+    min-height: 36px;
+  }
+  .josh-ask input { font-size: 13px; }
+  .josh-ask .btn {
+    font-size: 15px;
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .josh-actor.in,
   .josh-actor.out,
   .josh-actor.here .josh-bob,
+  .josh-actor.in .pose.fly,
+  .josh-actor.in .pose.stand,
+  .josh-actor.out .pose.fly,
+  .josh-actor.out .pose.stand,
+  .josh-bubble,
+  .josh-dock,
   .josh-spot {
     animation: none !important;
     transition: none;
