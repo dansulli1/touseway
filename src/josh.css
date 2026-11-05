@@ -141,13 +141,21 @@
   top: 4px;
   left: calc(100% + 14px);
   width: min(300px, calc(100vw - 48px));
+  height: fit-content;
+  min-height: 0;
+  flex: none;
+  align-self: flex-start;
   background: #fff;
   color: var(--ink);
   border-radius: 22px;
-  padding: 24px;
+  /* Tight pad — large padding used to leave a void under CTAs */
+  padding: 14px 16px 12px;
   box-shadow: 0 16px 40px rgba(20, 24, 40, 0.16);
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 12px;
   animation: josh-bubble-in 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
@@ -159,7 +167,8 @@
 .josh-copy {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  flex: none;
+  gap: 6px;
   animation: josh-bubble-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
@@ -183,7 +192,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 0 8px;
+  margin: 0;
+  flex: none;
 }
 
 .josh-bubble-bar .josh-x {
@@ -222,13 +232,18 @@
 .josh-controls {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 24px;
+  flex: none;
+  flex-grow: 0;
+  /* Progress ↔ Previous/Next — keep tight so no band under the bar */
+  gap: 12px;
+  margin: 0;
 }
 
 .josh-progress {
   width: 100%;
   height: 5px;
+  flex: none;
+  margin: 0;
   border-radius: 999px;
   background: var(--lavender);
   overflow: hidden;
@@ -247,21 +262,60 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  flex: none;
   gap: 12px;
+  margin: 0;
 }
 
-.josh-copy + .josh-actions {
-  margin-top: 24px;
+/* Welcome offer: stack CTAs; gap comes from .josh-bubble */
+.josh-bubble > .josh-actions {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.josh-controls .josh-actions {
+  /* Previous + Next share one vertical center */
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
 }
 
 .josh-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 0;
   background: transparent;
   color: var(--ink);
   font-weight: 700;
   font-size: 14px;
-  padding: 8px 12px;
+  line-height: 1.25;
+  /* No min-height — it inflated the bubble and faked empty bands */
+  min-height: 0;
+  padding: 0 4px;
   cursor: pointer;
+}
+
+.josh-bubble > .josh-actions .josh-quiet {
+  padding: 2px 8px;
+}
+
+.josh-controls .josh-quiet {
+  padding: 0;
+  line-height: 1.25;
+}
+
+.josh-controls .btn,
+.josh-bubble > .josh-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  font-size: 14px;
+  line-height: 1.25;
+  min-height: 0;
 }
 
 .josh-quiet:hover { color: var(--purple); }
@@ -565,14 +619,17 @@
     z-index: 1;
     width: min(210px, calc(100vw - 180px));
     max-height: min(360px, calc(100dvh - var(--header) - 28px));
-    height: auto;
+    height: fit-content;
+    min-height: 0;
+    flex: none;
     overflow: hidden;
-    padding: 10px 12px 8px;
+    padding: 10px 12px;
     border-radius: 16px;
     box-shadow: 0 12px 28px rgba(20, 24, 40, 0.14);
+    gap: 10px;
   }
   .josh-bubble-bar {
-    margin: 0 0 2px;
+    margin: 0;
     gap: 6px;
   }
   .josh-bubble .josh-copy {
@@ -585,16 +642,17 @@
   .josh-bubble .josh-controls,
   .josh-bubble > .josh-actions {
     flex: 0 0 auto;
+    margin: 0;
   }
   .josh-bubble .josh-controls {
+    gap: 10px;
+  }
+  .josh-bubble > .josh-actions {
     gap: 8px;
-    margin-top: 8px;
   }
-  .josh-bubble .josh-copy + .josh-actions {
-    margin-top: 8px;
-  }
-  .josh-bubble .josh-actions {
-    gap: 4px;
+  .josh-bubble .josh-controls .josh-actions {
+    align-items: center;
+    gap: 12px;
   }
   .josh-bubble::after,
   .josh-bubble.left::after {
@@ -618,15 +676,23 @@
   .josh-kicker { font-size: 10px; }
   .josh-say { font-size: 15px; line-height: 1.25; }
   .josh-detail { font-size: 12.5px; line-height: 1.4; }
+  /* Keep touch targets on dock/chat; bubble quiet must not grow a void */
   .josh-quiet {
     font-size: 12.5px;
     min-height: 36px;
     padding: 4px 8px;
   }
+  .josh-bubble .josh-quiet {
+    min-height: 0;
+    padding: 2px 4px;
+  }
   .josh-bubble .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: 13px;
-    min-height: 38px;
-    padding: 7px 12px;
+    min-height: 0;
+    padding: 8px 14px;
   }
   .josh-hey { font-size: 13px; }
   .josh-hey.note { font-size: 14px; }
